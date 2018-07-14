@@ -9,5 +9,12 @@
     (with-open [r (io/reader (.openStream url))]
       (json/read r :key-fn keyword))))
 
-(defn get-identity []
+(defn post-json [address]
+  "post json to address."
+  (let [url (URL. address)]
+    ))
+(defn get-identity-version []
   (get-json "https://identity.tyo1.conoha.io/"))
+
+(defn get-token [user pass tenantid]
+  )
