@@ -1,6 +1,7 @@
 (ns conoha-msg.core
   (:require [clojure.data.json :as json]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clj-http.client :as client])
   (:import java.net.URL))
 
 (defn get-json [address]
@@ -14,7 +15,7 @@
   (let [url (URL. address)]
     ))
 (defn get-identity-version []
-  (get-json "https://identity.tyo1.conoha.io/"))
+  (client/get "https://identity.tyo1.conoha.io/"))
 
 (defn get-token [user pass tenantid]
   )
