@@ -9,7 +9,16 @@
 
 (defn get-token-body [user pass tenantid]
   (let [req (format "{\"auth\": {\"passwordCredentials\": {\"username\": \"%s\", \"password\": \"%s\"}, \"tenantId\": \"%s\"}}" user pass tenantid)]
-    (print req)
     (client/post "https://identity.tyo1.conoha.io/v2.0/tokens"
                  {:body req
-                  :accept "application/json"})))
+                  :headers {"Accept" "application/json"}})))
+
+(defn get-token [user pass tenantid]
+  (let [json-str (get-token-body user pass tenantid)]
+    (:id (:token (:access (json/read-str (:body json-str) :key-fn keyword))))))
+
+(defn get-security-group [token]
+  (client/get "https://networking.tyo1.conoha.io/v2.0/security-groups"
+              {:headers {"Accept" "application/json"
+                         "X-Auth-Token" token}}))
+
