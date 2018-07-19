@@ -17,8 +17,10 @@
   (let [json-str (get-token-body user pass tenantid)]
     (:id (:token (:access (json/read-str (:body json-str) :key-fn keyword))))))
 
-(defn get-security-group [token]
-  (client/get "https://networking.tyo1.conoha.io/v2.0/security-groups"
+(defn get-request [url token]
+  (client/get url
               {:headers {"Accept" "application/json"
                          "X-Auth-Token" token}}))
 
+(defn get-security-group [token]
+  (get-request "https://networking.tyo1.conoha.io/v2.0/security-groups" token))
