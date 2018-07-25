@@ -39,3 +39,7 @@
 (defn get-notification-detail [tenantid token notificationid]
   (let [uri (format "https://account.tyo1.conoha.io/v1/%s/notifications/%s" tenantid notificationid)]
     (get-request uri token)))
+
+(defn get-payment-history [tenantid token]
+  (let [uri (format "https://account.tyo1.conoha.io/v1/%s/payment-history" tenantid)]
+    (get-request uri token)))
