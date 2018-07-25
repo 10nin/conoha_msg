@@ -29,9 +29,9 @@
 (defn get-security-group [token]
   (get-request "https://networking.tyo1.conoha.io/v2.0/security-groups" token))
 
-(defn get-notification
+(defn get-notification-list
   ([tenantid token offset limit]
    (let [uri (format "https://account.tyo1.conoha.io/v1/%s/notifications" tenantid)]
      (get-request uri token {"offset" offset, "limit" limit})))
   ([tenantid token]
-   (get-notification tenantid token 0 1000)))
+   (get-notification-list tenantid token 0 1000)))
