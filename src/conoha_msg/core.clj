@@ -35,3 +35,7 @@
      (get-request uri token {"offset" offset, "limit" limit})))
   ([tenantid token]
    (get-notification-list tenantid token 0 1000)))
+
+(defn get-notification-detail [tenantid token notificationid]
+  (let [uri (format "https://account.tyo1.conoha.io/v1/%s/notifications/%s" tenantid notificationid)]
+    (get-request uri token)))
