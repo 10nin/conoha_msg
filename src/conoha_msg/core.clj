@@ -25,21 +25,27 @@
                {:headers {"Accept" "application/json"
                           "X-Auth-Token" token}
                 :query-params query})))
- 
+
+(defn build-networking-uri
+  ([] "https://networking.tyo1.conoha.io/v2.0/security-groups"))
+  
+(defn build-account-uri
+  ([tenantid suffix] (format "https://account.tyo1.conoha.io/v1/%s%s" tenantid suffix)))
+
 (defn get-security-group [token]
-  (get-request "https://networking.tyo1.conoha.io/v2.0/security-groups" token))
+  (get-request (build-networking-uri) token))
 
 (defn get-notification-list
   ([tenantid token offset limit]
-   (let [uri (format "https://account.tyo1.conoha.io/v1/%s/notifications" tenantid)]
+   (let [uri (build-account-uri tenantid "/notifications")]
      (get-request uri token {"offset" offset, "limit" limit})))
   ([tenantid token]
    (get-notification-list tenantid token 0 1000)))
 
 (defn get-notification-detail [tenantid token notificationid]
-  (let [uri (format "https://account.tyo1.conoha.io/v1/%s/notifications/%s" tenantid notificationid)]
+  (let [uri (build-account-uri tenantid (format "/notifications/%s" notificationid))]
     (get-request uri token)))
 
 (defn get-payment-history [tenantid token]
-  (let [uri (format "https://account.tyo1.conoha.io/v1/%s/payment-history" tenantid)]
+  (let [uri (build-account-uri tenantid "/payment-history")]
     (get-request uri token)))
