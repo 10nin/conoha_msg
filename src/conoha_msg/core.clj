@@ -13,9 +13,12 @@
                  {:body req
                   :headers {"Accept" "application/json"}})))
 
-(defn get-token [user pass tenantid]
-  (let [json-str (get-token-body user pass tenantid)]
-    (:id (:token (:access (json/read-str (:body json-str) :key-fn keyword))))))
+(defn get-token
+  ([account]
+   (get-token (:user account) (:passwd account) (:tenantid account)))
+  ([user pass tenantid]
+   (let [json-str (get-token-body user pass tenantid)]
+     (:id (:token (:access (json/read-str (:body json-str) :key-fn keyword)))))))
 
 (defn get-request
   ([url token]
@@ -31,6 +34,9 @@
   
 (defn build-account-uri
   ([tenantid suffix] (format "https://account.tyo1.conoha.io/v1/%s%s" tenantid suffix)))
+
+(defn build-compute-uri
+  ([tenantid suffix] (format "https://compute.tyo1.conoha.io/v2/%s%s" tenantid suffix)))
 
 (defn get-security-group [token]
   (get-request (build-networking-uri) token))
@@ -48,4 +54,8 @@
 
 (defn get-payment-history [tenantid token]
   (let [uri (build-account-uri tenantid "/payment-history")]
+    (get-request uri token)))
+
+(defn get-virtualmachine-list [tenantid token]
+  (let [uri (build-compute-uri tenantid "/servers")]
     (get-request uri token)))
