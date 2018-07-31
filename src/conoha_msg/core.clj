@@ -1,5 +1,6 @@
 (ns conoha-msg.core
   (:require [clojure.data.json :as json]
+            [clojure.string :as s]
             [clojure.java.io :as io]
             [clj-http.client :as client])
   (:import java.net.URL))
@@ -29,14 +30,17 @@
                           "X-Auth-Token" token}
                 :query-params query})))
 
+(defn build-uri [api-type ver]
+  (format "https://%s.tyo1.conoha.io/%s"))
+
 (defn build-networking-uri
-  ([] "https://networking.tyo1.conoha.io/v2.0/security-groups"))
+  ([] (s/join (build-uri "networking" "v2.0") "/security-groups")))
   
 (defn build-account-uri
-  ([tenantid suffix] (format "https://account.tyo1.conoha.io/v1/%s%s" tenantid suffix)))
+  ([tenantid suffix] (format (s/join (build-uri "account" "v1") "/%s%s") tenantid suffix)))
 
 (defn build-compute-uri
-  ([tenantid suffix] (format "https://compute.tyo1.conoha.io/v2/%s%s" tenantid suffix)))
+  ([tenantid suffix] (format (s/join (build-uri "compute" "v2") "/%s%s") tenantid suffix)))
 
 (defn get-security-group [token]
   (get-request (build-networking-uri) token))
